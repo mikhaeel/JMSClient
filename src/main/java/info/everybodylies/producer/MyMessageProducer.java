@@ -1,4 +1,4 @@
-package info.everybodylies;
+package info.everybodylies.producer;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
@@ -14,14 +14,14 @@ public class MyMessageProducer
         //Create a connection factory
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost");
         // Create a connection
-        Connection connection = new connectionFactory.createConnection();
+        Connection connection = connectionFactory.createConnection();
         connection.start();
 
         //Create session
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
         //Create destination
-        Destination destination = session.createQueue("foo.bar");
+        Destination destination = session.createQueue("MyQueue");
 
         // Create a MessageProducer from the Session to the Topic or Queue
         MessageProducer producer = session.createProducer(destination);
