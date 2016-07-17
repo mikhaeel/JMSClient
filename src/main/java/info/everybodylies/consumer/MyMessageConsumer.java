@@ -12,11 +12,17 @@ import javax.jms.TextMessage;
  */
 public class MyMessageConsumer
 {
-    public void consumeMessage() throws JMSException
+    String queueName;
+    public MyMessageConsumer(String queueName) throws JMSException {
+        this.queueName = queueName;
+    }
+
+    public void consumeMessage(int timeout) throws JMSException
     {
-        try(JMSConsumer jmsConsumer = new JMSConsumer("foo.bar")) {
+        try {
+            JMSConsumer jmsConsumer = new JMSConsumer("foo.bar");
             MessageConsumer messageConsumer = jmsConsumer.getMessageConsumer();
-            Message message = messageConsumer.receive(1000);
+            Message message = messageConsumer.receive(timeout);
             if (message instanceof TextMessage) {
                 TextMessage textMessage = (TextMessage) message;
                 String text = textMessage.getText();
