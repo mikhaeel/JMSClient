@@ -1,7 +1,10 @@
 package info.everybodylies.consumer;
 
+import info.everybodylies.jmsconnector.JMSConsumer;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.TextMessage;
 
 /**
@@ -9,11 +12,11 @@ import javax.jms.TextMessage;
  */
 public class MyMessageConsumer
 {
-    public void consumeMessage()
+    public void consumeMessage() throws JMSException
     {
-        try(ConsumerConnection consumerConnection = new ConsumerConnection()) {
-            consumerConnection.connect();
-            Message message = consumerConnection.getMessage(1000);
+        try(JMSConsumer jmsConsumer = new JMSConsumer("foo.bar")) {
+            MessageConsumer messageConsumer = jmsConsumer.getMessageConsumer();
+            Message message = messageConsumer.receive(1000);
             if (message instanceof TextMessage) {
                 TextMessage textMessage = (TextMessage) message;
                 String text = textMessage.getText();

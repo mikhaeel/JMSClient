@@ -1,5 +1,6 @@
 package info.everybodylies.producer;
 
+import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
@@ -9,10 +10,10 @@ import javax.jms.*;
  */
 public class MyMessageProducer
 {
-    public void produceMessage() throws Exception
+    public void produceMessage(int i) throws Exception
     {
         //Create a connection factory
-        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost");
+        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
         // Create a connection
         Connection connection = connectionFactory.createConnection();
         connection.start();
@@ -21,18 +22,18 @@ public class MyMessageProducer
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
         //Create destination
-        Destination destination = session.createQueue("MyQueue");
+        Destination destination = session.createQueue("foo.bar");
 
-        // Create a MessageProducer from the Session to the Topic or Queue
+        // Create a MessageProducer from the Sessi  on to the Topic or Queue
         MessageProducer producer = session.createProducer(destination);
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
         // Create a messages
-        String text = "Hello world! From: " + this.hashCode();
+        String text = "Hello world! From: " + i;
         TextMessage message = session.createTextMessage(text);
 
         // Tell the producer to send the message
-        System.out.println("Sent message: "+ message.hashCode() + " : " + Thread.currentThread().getName());
+        System.out.println("Sent message: "+ text);
         producer.send(message);
 
         // Clean up

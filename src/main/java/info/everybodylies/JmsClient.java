@@ -12,8 +12,11 @@ public class JmsClient
     public static void main(String[] args)
     {
         try {
-            new MyMessageProducer().produceMessage();
-            new MyMessageConsumer().consumeMessage();
+            for (int i = 0; i < 100; i++) {
+                new MyMessageProducer().produceMessage(i);
+                Thread.sleep(100);
+                new MyMessageConsumer().consumeMessage();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
